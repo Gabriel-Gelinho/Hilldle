@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hilldle - Silent Hill Guessing Game</title>
+  <style>
+    @font-face {
+      font-family: 'SilentHill';
+      src: url('assets/fonts/SLNTHLN.TTF') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/webp" href="assets/icon.webp">
+</head>
+<body>
+  <!-- Language Switch -->
+  <div class="language-switch">
+    <img src="assets/images/br.webp" alt="Português" onclick="setLanguage('pt')" title="Português">
+    <img src="assets/images/usa.png" alt="English" onclick="setLanguage('en')" title="English">
+  </div>
+
+  <!-- Main Menu -->
+  <div id="menu" class="container">
+    <img src="assets/images/icon.webp" alt="Silent Hill Icon" class="title-icon blood-pulse">
+    <h1 class="blood-drip">HILLDLE</h1>
+    <h2 id="menu-title">Selecione o Modo de Jogo</h2>
+    
+    <div class="game-modes">
+      <button id="characters-btn" class="btn-blood">
+        <span class="blood-text">PERSONAGENS</span>
+      </button>
+      <button id="monsters-btn" class="btn-blood">
+        <span class="blood-text">MONSTROS</span>
+      </button>
+      <button id="music-btn" class="btn-blood">
+        <span class="blood-text">MÚSICAS</span>
+      </button>
+    </div>
+
+    <div class="game-stats">
+      <p id="daily-message">As respostas são atualizadas diariamente.</p>
+      <p>
+        <span id="stats-players">0</span> 
+        <span id="stats-correct">0</span> <span id="stats-percentage">0</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Game Screen (initially hidden) -->
+  <div id="game" class="container" style="display: none;">
+    <img src="assets/images/icon.webp" alt="Silent Hill Icon" class="title-icon blood-pulse">
+    <h1 class="blood-drip">HILLDLE</h1>
+    
+    <div id="attempts-counter" class="blood-text">TENTATIVAS RESTANTES: 5</div>
+    
+    <div class="input-container">
+      <input 
+        list="characters" 
+        id="guess-input" 
+        placeholder="Digite ou selecione um personagem"
+        autocomplete="off"
+      >
+      <datalist id="characters">
+        <!-- Options will be filled dynamically -->
+      </datalist>
+      <button id="submit-button" class="btn-blood">
+        <span class="blood-text">ENVIAR PALPITE</span>
+      </button>
+    </div>
+    
+    <!-- Music Controls Container -->
+    <div id="music-player-container" style="display: none;">
+      <div class="music-controls">
+        <button id="play-music-btn" class="btn-blood">
+          <span class="blood-text">TOCAR TRECHO (<span id="clip-duration">5</span>s)</span>
+        </button>
+        <div class="clip-player">
+          <div class="clip-progress"></div>
+          <div class="clip-time"><span id="current-time">0</span>s / <span id="max-time">5</span>s</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="results"></div>
+    
+    <div id="character-image-container">
+      <!-- Character/Monster image will appear here -->
+    </div>
+    
+    <div class="game-stats">
+      <p id="timer" class="blood-text">PRÓXIMO DESAFIO EM: 23h 59m</p>
+    </div>
+
+    <div id="streak-counter" class="streak-display">Sequência: 0</div>
+    
+    <audio id="success-sound" src="assets/sounds/success.mp3" preload="auto"></audio>
+    
+    <button id="back-button" class="btn-blood" style="margin-top: 20px;">
+      <span class="blood-text">VOLTAR AO MENU</span>
+    </button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
