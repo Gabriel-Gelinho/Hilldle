@@ -1,3 +1,38 @@
+// Firebase Database Reference
+const dbRef = firebase.database().ref('stats');
+
+// Função para atualizar estatísticas no Firebase
+function updateFirebaseStats(isCorrect) {
+  const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+  
+  dbRef.child(today).transaction(currentData => {
+    if (!currentData) {
+      return {
+        players: 1,
+        correct: isCorrect ? 1 : 0,
+        incorrect: isCorrect ? 0 : 1
+      };
+    }
+    
+    return {
+      players: currentData.players + 1,
+      correct: isCorrect ? currentData.correct + 1 : currentData.correct,
+      incorrect: isCorrect ? currentData.incorrect : currentData.incorrect + 1
+    };
+  });
+}
+
+// Função para carregar estatísticas do Firebase
+function loadFirebaseStats(callback) {
+  const today = new Date().toISOString().split('T')[0];
+  
+  dbRef.child(today).once('value').then(snapshot => {
+    const data = snapshot.val() || { players: 0, correct: 0, incorrect: 0 };
+    callback(data);
+  });
+}
+
+
 // Game Data
 const gameData = {
   characters: [
@@ -1605,6 +1640,8 @@ function endGame(isWin) {
   playerWon = isWin;
   const t = translations[currentLang];
 
+  updateFirebaseStats(isWin);
+
   if (isWin) {
     winStreak++;
     saveWinStreak();
@@ -1671,14 +1708,16 @@ function updateUI() {
 }
 
 function updateStats() {
-  const t = translations[currentLang].stats;
-  const percentage = stats.players > 0 
-    ? Math.round((stats.correct / stats.players) * 100)
-    : 0;
-  
-  elements.statsPlayers.textContent = stats.players + t.players;
-  elements.statsCorrect.textContent = stats.correct + t.correct;
-  elements.statsPercentage.textContent = percentage + t.percentage;
+  loadFirebaseStats(data => {
+    const t = translations[currentLang].stats;
+    const percentage = data.players > 0 
+      ? Math.round((data.correct / data.players) * 100)
+      : 0;
+    
+    elements.statsPlayers.textContent = data.players + t.players;
+    elements.statsCorrect.textContent = data.correct + t.correct;
+    elements.statsPercentage.textContent = percentage + t.percentage;
+  });
 }
 
 function updateTimer() {
@@ -1720,7 +1759,6 @@ function forceDailyReset() {
   // 1. Limpa todas as respostas e estados
   localStorage.removeItem('dailyAnswers');
   localStorage.removeItem('gameState');
-  localStorage.removeItem('hilldleStats');
   localStorage.setItem('lastResetTime', now.toISOString());
   
   // 2. Gera novas respostas para todos os modos
@@ -1919,29 +1957,6 @@ document.addEventListener('DOMContentLoaded', initGame);
 
 // Update timer every minute
 setInterval(updateTimer, 1000);
-
-function getDailyStats() {
-  const today = new Date().toDateString();
-  const savedStats = localStorage.getItem('hilldleStats');
-  
-  if (savedStats) {
-    const parsedStats = JSON.parse(savedStats);
-    if (parsedStats.date === today) {
-      return parsedStats;
-    }
-  }
-  
-  // Reset diário
-  return {
-    date: today,
-    players: 0,
-    correct: 0
-  };
-}
-
-function saveStats() {
-  localStorage.setItem('hilldleStats', JSON.stringify(stats));
-}
 
 function saveGameState() {
   const gameState = JSON.parse(localStorage.getItem('gameState') || '{}');
