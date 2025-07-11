@@ -16,6 +16,25 @@
   <link rel="icon" type="image/webp" href="assets/icon.webp">
 </head>
 <body>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+    apiKey: "AIzaSyD1I4mnjhbcJX1R3QIMzlUwPoi3qm8Gzm8",
+    authDomain: "hilldle.firebaseapp.com",
+    databaseURL: "https://hilldle-default-rtdb.firebaseio.com",
+    projectId: "hilldle",
+    storageBucket: "hilldle.firebasestorage.app",
+    messagingSenderId: "74602484323",
+    appId: "1:74602484323:web:1cb90ef266ca706ce25e56",
+    measurementId: "G-K9YJL5W2F2"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const database = firebase.database();
+  </script>
   <!-- Language Switch -->
   <div class="language-switch">
     <img src="assets/images/br.webp" alt="Português" onclick="setLanguage('pt')" title="Português">
@@ -49,7 +68,7 @@
     </div>
   </div>
 
-  <!-- Game Screen (initially hidden) -->
+  <!-- Game Screen -->
   <div id="game" class="container" style="display: none;">
     <img src="assets/images/icon.webp" alt="Silent Hill Icon" class="title-icon blood-pulse">
     <h1 class="blood-drip">HILLDLE</h1>
