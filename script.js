@@ -1119,7 +1119,7 @@ let audioElement = null;
 
 let winStreak = 0;
 let lastPlayDate = null;
-const STREAK_TIMEOUT = 2 * 60 * 1000; // 2 dias em milissegundos (para produção)
+const STREAK_TIMEOUT = 24 * 60 * 60 * 1000; // 2 dias em milissegundos (para produção)
 // Para teste use: const STREAK_TIMEOUT = 2 * 60 * 1000; // 2 minutos
 
 // DOM Elements
@@ -1683,7 +1683,7 @@ function updateStats() {
 
 function updateTimer() {
   const now = new Date();
-  const testMode = true; // Modo teste ativado
+  const testMode = false; // Modo teste ativado
   const resetInterval = testMode ? 2 * 60 * 1000 : 24 * 60 * 60 * 1000;
   
   // Obtém ou define o último reset
